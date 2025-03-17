@@ -31,7 +31,7 @@ const selectedOption = computed(() => options[selectedID.value] ?? allProductsOp
 
 const { isDesktop } = useDevice()
 
-const select = (id, func) => {
+const select = (id: number, func: () => void): void => {
   selectedID.value = id
   if (isDesktop) {
     func()

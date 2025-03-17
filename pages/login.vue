@@ -13,12 +13,17 @@ const credentials = reactive<LoginCredentials>({
   password: 'secret'
 })
 
+const error = ref('')
+
 const login = async () => {
   const success = await authStore.login(credentials)
   if (success) {
     const redirectPath = authStore.redirectPath || '/'
     authStore.setRedirectPath(null)
     await router.push(redirectPath)
+  }
+  else {
+    error.value = 'Неверные логин/пароль'
   }
 }
 
@@ -39,6 +44,7 @@ const logout = async () => {
               v-model="credentials.login"
               placeholder="Enter your login"
               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              @input="error = ''"
           >
         </div>
         <div>
@@ -49,8 +55,10 @@ const logout = async () => {
               type="password"
               placeholder="Enter your password"
               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              @input="error = ''"
           >
         </div>
+        <p v-if="error.length > 0" class="text-sm text-red-500">{{ error }}</p>
         <button
             type="submit"
             class="w-full bg-[#337566] text-white py-2 px-4 rounded-md cursor-pointer"
